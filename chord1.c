@@ -29,7 +29,14 @@ NO* criarNO(int numero, const char* recurso) {
         exit(EXIT_FAILURE);
     }
     novoNo->numero = numero;
-    novoNo->recurso = strdup(recurso);
+    // Alocar memória para a string de recurso e copiar o conteúdo
+    novoNo->recurso = (char*)malloc(strlen(recurso) + 1); // +1 para o caractere nulo
+    if (novoNo->recurso == NULL) {
+        printf("Erro: não foi possível alocar memória para o recurso.\n");
+        free(novoNo); // Liberar a memória alocada para o novo nó
+        exit(EXIT_FAILURE);
+    }
+    strcpy(novoNo->recurso, recurso);
     novoNo->ativo = 0; // Inicializa como não ativo
     novoNo->proximo = NULL;
     return novoNo;
@@ -55,14 +62,19 @@ void inserirRecurso(NO* lista[], const char* recurso) {
 
 // Função para ativar um nó na lista circular
 void ativarNo(NO* lista[], int numero) {
+    if (numero < 0 || numero >= TAMANHO_LISTA) {
+        printf("Erro: número de nó inválido.\n");
+        return;
+    }
+
     if (lista[numero] != NULL) {
         lista[numero]->ativo = 1;
-        printf("O nó %d foi ativado.\n", numero);
+        //printf("O nó %d foi ativado.\n", numero);
     } else {
         // Se o nó não existe, criamos um novo nó vazio e o marcamos como ativo
         lista[numero] = criarNO(numero, "sem recurso");
         lista[numero]->ativo = 1;
-        printf("O nó %d foi ativado.\n", numero);
+        //printf("O nó %d foi ativado.\n", numero);
     }
 }
 
@@ -126,24 +138,40 @@ void imprimirLista(NO* lista[]) {
 }
 
 void ligarNosAtivados(NO* lista[]) {
+    // Encontrar o primeiro nó ativo
+    int primeiroAtivo = -1;
     for (int i = 0; i < TAMANHO_LISTA; i++) {
         if (lista[i] != NULL && lista[i]->ativo == 1) {
-            NO* atual = lista[i];
-            NO* proximoAtivado = NULL;
-            int j = (i + 1) % TAMANHO_LISTA;
-            while (proximoAtivado == NULL && j != i) {
-                if (lista[j] != NULL && lista[j]->ativo == 1) {
-                    proximoAtivado = lista[j];
-                }
-                j = (j + 1) % TAMANHO_LISTA;
-            }
-            if (proximoAtivado != NULL) {
-                NO* ultimo = atual;
-                while (ultimo->proximo != atual) {
-                    ultimo = ultimo->proximo;
-                }
-                ultimo->proximo = proximoAtivado;
-            }
+            primeiroAtivo = i;
+            break;
+        }
+    }
+
+    // Se não há nenhum nó ativo, não há nada a fazer
+    if (primeiroAtivo == -1) {
+        return;
+    }
+
+    // Recriar a ligação entre os nós ativos
+    NO* atual = lista[primeiroAtivo];
+    while (atual->proximo != lista[primeiroAtivo]) {
+        atual = atual->proximo;
+    }
+    atual->proximo = lista[primeiroAtivo];
+}
+
+
+void imprimirNosLigados(NO* lista[]) {
+    for (int i = 0; i < TAMANHO_LISTA; i++) {
+        NO* atual = lista[i];
+        if (atual != NULL && atual->ativo == 1) {
+            printf("Nó %d: ", i);
+            NO* temp = atual;
+            do {
+                printf("%d ", temp->numero);
+                temp = temp->proximo;
+            } while (temp != atual);
+            printf("\n");
         }
     }
 }
@@ -167,15 +195,29 @@ int main() {
     // Exemplo de impressão da lista
     imprimirLista(lista);
 
+
+    printf("-------------------------------\n");
+
     // Ativar um nó na lista
     ativarNo(lista, 0);
     ativarNo(lista, 3);
     ativarNo(lista, 4);
+    // Imprimir os nós ativos e seus nós ligados
+    imprimirNodosAtivos(lista);
+
+     printf("-------------------------------\n");
 
     desativarNo(lista, 4);
 
-    // Imprimir os nós ativos e seus nós ligados
+     printf("-------------------------------\n");
+
     imprimirNodosAtivos(lista);
+
+    printf("------------------------------\n");
+
+    printf("Os nós ligados: \n");
+
+    imprimirNosLigados(lista);
 
     // Liberar memória alocada
     liberarLista(lista);
