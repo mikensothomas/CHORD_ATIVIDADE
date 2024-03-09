@@ -1,44 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct NO {
+typedef struct no {
     int dado;
-    struct NO* proximo;
-} NO;
+    struct no* proximo;
+} no;
 
 // Função para criar um novo nó
-NO* criarNo(int dado) {
-    NO* novoNo = (NO*)malloc(sizeof(NO));
-    if (novoNo == NULL) {
+no* criarno(int dado) {
+    no* novono = (no*)malloc(sizeof(no));
+    if (novono == NULL) {
         printf("Erro: Memória insuficiente!\n");
         exit(1);
     }
-    novoNo->dado = dado;
-    novoNo->proximo = NULL;
-    return novoNo;
+    novono->dado = dado;
+    novono->proximo = NULL;
+    return novono;
 }
 
 // Função para inserir um nó no final da lista
-NO* inserir_no_final(NO* ultimo, int dado) {
+no* inserir_no_final(no* ultimo, int dado) {
     if (ultimo == NULL) {
-        ultimo = criarNo(dado);
+        ultimo = criarno(dado);
         ultimo->proximo = ultimo; // Ponteiro proximo aponta para si mesmo
     } else {
-        NO* novoNo = criarNo(dado);
-        novoNo->proximo = ultimo->proximo;
-        ultimo->proximo = novoNo;
-        ultimo = novoNo;
+        no* novono = criarno(dado);
+        novono->proximo = ultimo->proximo;
+        ultimo->proximo = novono;
+        ultimo = novono;
     }
     return ultimo;
 }
 
 // Função para imprimir os elementos da lista circular
-void imprimir_lista(NO* ultimo) {
+void imprimir_lista(no* ultimo) {
     if (ultimo == NULL) {
         printf("Lista vazia!\n");
         return;
     }
-    NO* temp = ultimo->proximo;
+    no* temp = ultimo->proximo;
     do {
         printf("%d ", temp->dado);
         temp = temp->proximo;
@@ -48,7 +48,7 @@ void imprimir_lista(NO* ultimo) {
 
 // Função principal
 int main() {
-    NO* ultimo = NULL;
+    no* ultimo = NULL;
 
     // Inserindo elementos na lista circular
     ultimo = inserir_no_final(ultimo, 1);
