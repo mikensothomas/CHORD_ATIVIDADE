@@ -143,7 +143,6 @@ void ligarNosAtivados(NO* lista[]) {
                     ultimo = ultimo->proximo;
                 }
                 ultimo->proximo = proximoAtivado;
-                printf("O nó %d foi ligado com o nó %d.\n", ultimo->numero, proximoAtivado->numero);
             }
         }
     }
