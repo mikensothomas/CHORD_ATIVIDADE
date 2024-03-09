@@ -76,24 +76,6 @@ void desativarNo(NO* lista[], int numero) {
     }
 }
 
-
-// Função para imprimir os nós ativos e com quem cada um deles está ligado
-void imprimirNodosAtivos(NO* lista[]) {
-    printf("Nós Ativos:\n");
-    for (int i = 0; i < TAMANHO_LISTA; i++) {
-        if (lista[i] != NULL && lista[i]->ativo == 1) {
-            printf("Nó %d (Recurso: %s) -> ", i, lista[i]->recurso);
-            NO* atual = lista[i]->proximo;
-            while (atual != NULL && atual != lista[i]) {
-                printf("Nó %d (Recurso: %s) -> ", atual->numero, atual->recurso);
-                atual = atual->proximo;
-            }
-            printf("\n");
-        }
-    }
-}
-
-
 void liberarLista(NO* lista[]) {
     for (int i = 0; i < TAMANHO_LISTA; i++) {
         NO* atual = lista[i];
@@ -106,6 +88,22 @@ void liberarLista(NO* lista[]) {
                 break;
         }
         lista[i] = NULL; // Define o ponteiro da lista como NULL após liberar todos os nós
+    }
+}
+
+void imprimirNodosAtivos(NO* lista[]) {
+    printf("Nós Ativos:\n");
+    for (int i = 0; i < TAMANHO_LISTA; i++) {
+        if (lista[i] != NULL && lista[i]->ativo == 1) {
+            NO* atual = lista[i];
+            printf(" %d -> ", atual->numero);
+            NO* inicio = atual;
+            do {
+                printf("(%s) -> ", atual->recurso);
+                atual = atual->proximo;
+            } while (atual != inicio && atual != NULL); // Adicionando a verificação de atual != NULL
+            printf("\n");
+        }
     }
 }
 
@@ -127,6 +125,32 @@ void imprimirLista(NO* lista[]) {
     }
 }
 
+void ligarNosAtivados(NO* lista[]) {
+    for (int i = 0; i < TAMANHO_LISTA; i++) {
+        if (lista[i] != NULL && lista[i]->ativo == 1) {
+            NO* atual = lista[i];
+            NO* proximoAtivado = NULL;
+            int j = (i + 1) % TAMANHO_LISTA;
+            while (proximoAtivado == NULL && j != i) {
+                if (lista[j] != NULL && lista[j]->ativo == 1) {
+                    proximoAtivado = lista[j];
+                }
+                j = (j + 1) % TAMANHO_LISTA;
+            }
+            if (proximoAtivado != NULL) {
+                NO* ultimo = atual;
+                while (ultimo->proximo != atual) {
+                    ultimo = ultimo->proximo;
+                }
+                ultimo->proximo = proximoAtivado;
+                printf("O nó %d foi ligado com o nó %d.\n", ultimo->numero, proximoAtivado->numero);
+            }
+        }
+    }
+}
+
+
+
 int main() {
     // Inicializando a lista com NULL
     NO* lista[TAMANHO_LISTA];
@@ -138,6 +162,8 @@ int main() {
     inserirRecurso(lista, "filme");
     inserirRecurso(lista, "musica");
     inserirRecurso(lista, "video");
+    inserirRecurso(lista, "Mikenson");
+    inserirRecurso(lista, "Shella");
 
     // Exemplo de impressão da lista
     imprimirLista(lista);
