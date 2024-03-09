@@ -215,9 +215,9 @@ int main() {
 
     printf("------------------------------\n");
 
-    printf("Os nós ligados: \n");
+    //printf("Os nós ligados: \n");
 
-    imprimirNosLigados(lista);
+    //imprimirNosLigados(lista);
 
     // Liberar memória alocada
     liberarLista(lista);
