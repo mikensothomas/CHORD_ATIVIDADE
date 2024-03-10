@@ -7,27 +7,27 @@ typedef struct NO {
 } NO;
 
 // Função para criar um NOvo nó
-NO* criarNO(int dado) {
-    NO* NOvoNO = (NO*)malloc(sizeof(NO));
-    if (NOvoNO == NULL) {
+NO* criar_no(int dado) {
+    NO* novo_no = (NO*)malloc(sizeof(NO));
+    if (novo_no == NULL) {
         printf("Erro: Memória insuficiente!\n");
         exit(1);
     }
-    NOvoNO->dado = dado;
-    NOvoNO->proximo = NULL;
-    return NOvoNO;
+    novo_no->dado = dado;
+    novo_no->proximo = NULL;
+    return novo_no;
 }
 
 // Função para inserir um nó NO final da lista
 NO* inserir_NO_final(NO* ultimo, int dado) {
     if (ultimo == NULL) {
-        ultimo = criarNO(dado);
+        ultimo = criar_no(dado);
         ultimo->proximo = ultimo; // Ponteiro proximo aponta para si mesmo
     } else {
-        NO* NOvoNO = criarNO(dado);
-        NOvoNO->proximo = ultimo->proximo;
-        ultimo->proximo = NOvoNO;
-        ultimo = NOvoNO;
+        NO* novo_no = criar_no(dado);
+        novo_no->proximo = ultimo->proximo;
+        ultimo->proximo = novo_no;
+        ultimo = novo_no;
     }
     return ultimo;
 }
