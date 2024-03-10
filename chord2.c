@@ -1,83 +1,72 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Definição da estrutura do nó
-typedef struct No {
-    int dado;
-    struct No *proximo;
-} No;
+typedef struct NO {
+    int valor;
+    struct NO* proximo;
+} NO;
 
-// Definição da estrutura da lista
 typedef struct Lista {
-    No *inicio;
-    No *final;
+    NO* inicio;
+    NO* fim;
 } Lista;
 
-// Função para inicializar a lista
-void inicializarLista(Lista *lista) {
+void inicializa_lista(Lista *lista) {
     lista->inicio = NULL;
-    lista->final = NULL;
+    lista->fim = NULL;
 }
 
-// Função para inserir um elemento no final da lista
-void inserirFinal(Lista *lista, int dado) {
-    // Criar um novo nó
-    No *novoNo = (No *)malloc(sizeof(No));
-    if (novoNo == NULL) {
-        printf("Erro: Não foi possível alocar memória para o novo nó.\n");
+void inserir_no_fim(Lista* lista, int valor) {
+    NO* novo_no = (NO *)malloc(sizeof(NO));
+    if (novo_no == NULL) {
+        printf("Erro: Não foi possível alocar memória para o NOvo nó.\n");
         return;
     }
 
-    // Preencher os dados do novo nó
-    novoNo->dado = dado;
-    novoNo->proximo = NULL;
-
-    // Verificar se a lista está vazia
+    novo_no->valor = valor;
+    
     if (lista->inicio == NULL) {
-        lista->inicio = novoNo;
+        lista->inicio = novo_no;
     } else {
-        lista->final->proximo = novoNo;
+        lista->fim->proximo = novo_no;
     }
 
-    // Atualizar o ponteiro final para o novo nó
-    lista->final = novoNo;
+    lista->fim = novo_no;
 
-    // Tornar a lista circular
-    lista->final->proximo = lista->inicio;
+    lista->fim->proximo = lista->inicio;
 }
 
-// Função para exibir os elementos da lista
-void exibirLista(Lista *lista) {
+void imprimir_lista(Lista* lista) {
     if (lista->inicio == NULL) {
         printf("Lista vazia.\n");
         return;
     }
 
-    No *atual = lista->inicio;
+    NO* atual = lista->inicio;
 
-    // Percorrer a lista até o final
     do {
-        printf("%d ", atual->dado);
+        printf("%d ", atual->valor);
         atual = atual->proximo;
     } while (atual != lista->inicio);
 
     printf("\n");
 }
 
-// Função principal
 int main() {
     Lista lista;
-    inicializarLista(&lista);
+    inicializa_lista(&lista);
 
-    // Inserir elementos na lista
-    inserirFinal(&lista, 10);
-    inserirFinal(&lista, 20);
-    inserirFinal(&lista, 30);
-    inserirFinal(&lista, 40);
+    inserir_no_fim(&lista, 10);
+    inserir_no_fim(&lista, 20);
+    inserir_no_fim(&lista, 30);
+    inserir_no_fim(&lista, 40);
+    inserir_no_fim(&lista, 50);
+    inserir_no_fim(&lista, 60);
+    inserir_no_fim(&lista, 70);
+    inserir_no_fim(&lista, 80);
 
-    // Exibir a lista
     printf("Lista: ");
-    exibirLista(&lista);
+    imprimir_lista(&lista);
 
     return 0;
 }

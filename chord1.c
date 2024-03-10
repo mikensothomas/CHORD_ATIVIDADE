@@ -20,10 +20,10 @@ int hash(const char* recurso) {
     return soma % TAMANHO_LISTA;
 }
 
-NO* criar_no(int numero, const char* recurso) {
+NO* criar_NO(int numero, const char* recurso) {
     NO* novo_no = (NO*)malloc(sizeof(NO));
     if (novo_no == NULL) {
-        printf("Erro: não foi possível alocar memória para o novo nó.\n");
+        printf("Erro: não foi possível alocar memória para o NOvo nó.\n");
     }
     novo_no->numero = numero;
     strcpy(novo_no->recurso, recurso);
@@ -34,18 +34,18 @@ NO* criar_no(int numero, const char* recurso) {
 
 void inserirRecurso(NO* lista[], const char* recurso) {
     int indice = hash(recurso);
-    NO* novo_no = criar_no(indice, recurso);
+    NO* novo_no = criar_NO(indice, recurso);
 
     if (lista[indice] == NULL) {
         lista[indice] = novo_no;
-        novo_no->proximo = novo_no; // O novo nó aponta para si mesmo
+        novo_no->proximo = novo_no; // O NOvo nó aponta para si mesmo
     } else {
-        novo_no->proximo = lista[indice]->proximo; // O novo nó aponta para o primeiro nó da lista
-        lista[indice]->proximo = novo_no; // O último nó aponta para o novo nó
+        novo_no->proximo = lista[indice]->proximo; // O NOvo nó aponta para o primeiro nó da lista
+        lista[indice]->proximo = novo_no; // O último nó aponta para o NOvo nó
     }
 }
 
-void ativarNo(NO* lista[], int numero) {
+void ativarNO(NO* lista[], int numero) {
     if (numero < 0 || numero >= TAMANHO_LISTA) {
         printf("Erro: número de nó inválido.\n");
         return;
@@ -54,12 +54,12 @@ void ativarNo(NO* lista[], int numero) {
     if (lista[numero] != NULL) {
         lista[numero]->ativo = 1;
     } else {
-        lista[numero] = criar_no(numero, "sem recurso");
+        lista[numero] = criar_NO(numero, "sem recurso");
         lista[numero]->ativo = 1;
     }
 }
 
-void desativarNo(NO* lista[], int numero) {
+void desativarNO(NO* lista[], int numero) {
     if (lista[numero] != NULL) {
         lista[numero]->ativo = 0;
         printf("O nó %d foi desativado.\n", numero);
@@ -82,7 +82,7 @@ void liberarLista(NO* lista[]) {
     }
 }
 
-void imprimirNodosAtivos(NO* lista[]) {
+void imprimirNOdosAtivos(NO* lista[]) {
     printf("Nós Ativos:\n");
     for (int i = 0; i < TAMANHO_LISTA; i++) {
         if (lista[i] != NULL && lista[i]->ativo == 1) {
@@ -114,7 +114,7 @@ void imprimirLista(NO* lista[]) {
     }
 }
 
-void ligarNosAtivados(NO* lista[]) {
+void ligarNOsAtivados(NO* lista[]) {
     int primeiroAtivo = -1;
     for (int i = 0; i < TAMANHO_LISTA; i++) {
         if (lista[i] != NULL && lista[i]->ativo == 1) {
@@ -134,7 +134,7 @@ void ligarNosAtivados(NO* lista[]) {
     atual->proximo = lista[primeiroAtivo];
 }
 
-void imprimirNosLigados(NO* lista[]) {
+void imprimirNOsLigados(NO* lista[]) {
     for (int i = 0; i < TAMANHO_LISTA; i++) {
         NO* atual = lista[i];
         if (atual != NULL && atual->ativo == 1) {
@@ -165,23 +165,23 @@ int main() {
 
     printf("-------------------------------\n");
 
-    ativarNo(lista, 0);
-    ativarNo(lista, 3);
-    ativarNo(lista, 4);
+    ativarNO(lista, 0);
+    ativarNO(lista, 3);
+    ativarNO(lista, 4);
 
-    imprimirNodosAtivos(lista);
-
-    printf("-------------------------------\n");
-
-    desativarNo(lista, 4);
+    imprimirNOdosAtivos(lista);
 
     printf("-------------------------------\n");
 
-    imprimirNodosAtivos(lista);
+    desativarNO(lista, 4);
+
+    printf("-------------------------------\n");
+
+    imprimirNOdosAtivos(lista);
 
     printf("------------------------------\n");
 
-    //imprimirNosLigados(lista);
+    //imprimirNOsLigados(lista);
 
     liberarLista(lista);
 
